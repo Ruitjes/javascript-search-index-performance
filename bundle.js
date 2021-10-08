@@ -5854,8 +5854,6 @@ console.log(movies)
 async function asyncCall() {
     const searchIndex = await si({db: levelup(memdown())});
 
-    console.log(window.performance.memory);
-
     console.log("SEARCH LIBRARY", searchIndex)
 
     const t0 = window.performance.now();
@@ -5868,7 +5866,19 @@ async function asyncCall() {
 
     // read documents from the index
     const t2 = window.performance.now();
-    const results = await searchIndex.QUERY('title:the', {DOCUMENTS: true})
+    const results = await searchIndex.QUERY('title:the', {
+      SORT: {
+        TYPE: 'NUMERIC',              // can be 'NUMERIC' or 'ALPHABETIC'
+        DIRECTION: 'ASCENDING',        // can be 'ASCENDING' or 'DESCENDING'
+        FIELD: '_match.year'          // field to sort on
+      },
+      PAGE: {
+        NUMBER: 0,
+        SIZE: 25
+      },
+      DOCUMENTS: true,
+    })
+
     const t3 = window.performance.now();
 
     console.log('SEARCHING TIME', t3 - t2)
