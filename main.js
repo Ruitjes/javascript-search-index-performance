@@ -21,7 +21,7 @@ async function asyncCall() {
 
     // read documents from the index
     const t2 = window.performance.now();
-    const results = await searchIndex.QUERY('the')
+    const results = await searchIndex.QUERY('title:the', {DOCUMENTS: true})
     const t3 = window.performance.now();
 
     console.log('SEARCHING TIME', t3 - t2)

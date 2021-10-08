@@ -5852,18 +5852,11 @@ var movies = JSON.parse(JSON.stringify(moviesJSON))
 console.log(movies)
 
 async function asyncCall() {
-    // initialize an index
-    const dbOptions = {
-      db: levelup(memdown())
-    }
-
     const searchIndex = await si({db: levelup(memdown())});
 
+    console.log(window.performance.memory);
+
     console.log("SEARCH LIBRARY", searchIndex)
-
-    // document.getElementById("documents").innerHTML = "DOCUMENT COUNT: " + movies.length + " rows";
-
-    // await searchIndex.FLUSH()
 
     const t0 = window.performance.now();
     // add documents to the index
@@ -5875,7 +5868,7 @@ async function asyncCall() {
 
     // read documents from the index
     const t2 = window.performance.now();
-    const results = await searchIndex.QUERY('the')
+    const results = await searchIndex.QUERY('title:the', {DOCUMENTS: true})
     const t3 = window.performance.now();
 
     console.log('SEARCHING TIME', t3 - t2)
@@ -5883,7 +5876,6 @@ async function asyncCall() {
 
     console.log('SEARCH RESULTS', results);
     document.getElementById("result").innerHTML = "RESULT IN CONSOLE";
-
   }
 
 asyncCall()
